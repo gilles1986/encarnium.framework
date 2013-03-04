@@ -1,0 +1,7 @@
+[
+ "libs/jquery.js",
+ "libs/SiteLoader.js",
+ "libs/bootstrap.js",
+ "libs/AjaxFormHandler.js",
+ "classes/System.js"
+]

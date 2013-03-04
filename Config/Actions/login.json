@@ -1,0 +1,31 @@
+{
+   "controller" : "Login",
+   "method"		: "loginAction",
+   "validation" : [
+     {
+       "name" : "username",
+       "displayName" : "Benutzername",
+       "validators" : [
+         {
+           "name" : "Mandatory"
+         },
+         {
+           "name" : "Standard"
+         }
+       ]
+     },
+     {
+       "name" : "password",
+       "displayName" : "Passwort",
+       "validators" : [
+         {
+           "name" : "Mandatory"
+         },
+         {
+           "name" : "Standard"
+         }
+       ]
+     }
+   
+   ]
+} 

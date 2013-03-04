@@ -1,0 +1,5 @@
+{
+   "controller" : "UserSite",
+   "method"		: "loggedIn",
+   "validation" : []
+} 

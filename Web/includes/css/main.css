@@ -1,0 +1,143 @@
+@CHARSET "UTF-8";
+
+body {
+  background-color: #333333;
+  font-size: 1em;
+
+}
+
+h1 img {
+  margin-top: -0.2em;
+  margin-right: 0.5em;
+}
+
+a {
+  color: #4434b3;
+}
+
+#contentWrapper {
+  width: 95em;
+  margin: auto;
+  background-color: #e8e8e8;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  padding: 1em 3em;
+  /*-moz-border-radius: 1em;
+  border-radius: 1em;*/
+}
+
+#content {
+  
+  padding: 0 40px;
+  overflow: hidden;
+  font-size: 1.2em;
+}
+
+#content h2 {
+  color: #2137b3;
+}
+
+#content form label {
+  display: block;
+  float: none;
+  width: auto;
+  text-align: left;
+}
+
+.form-horizontal .controls {
+ margin: 0;
+}
+
+#content form input[type=submit] {
+  margin-top: 1em;
+  display: block;
+}
+
+#content form input[type=submit]:hover {
+  cursor: pointer;
+  
+}
+
+
+input[type="checkbox"].wrongInput,  textarea.wrongInput,  input[type="text"].wrongInput, input[type="password"].wrongInput, input[type="datetime"].wrongInput,  input[type="datetime-local"].wrongInput , input[type="date"].wrongInput, input[type="month"].wrongInput {
+    
+    outline: 0 none;
+    background-color: #e2d1d1;
+}
+
+input[type="checkbox"].wrongInput:focus,textarea.wrongInput:focus,  input[type="text"].wrongInput:focus, input[type="password"].wrongInput:focus, input[type="datetime"].wrongInput:focus,  input[type="datetime-local"].wrongInput:focus , input[type="date"].wrongInput:focus, input[type="month"].wrongInput:focus {
+    border-color: rgba(180, 88, 78, 0.80);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(180, 105, 40, 0.60);
+    outline: 0 none;
+}
+
+
+
+.leftContent {
+  width: 70em;
+}
+
+
+/**
+Eingeloggter Bereich
+**/
+
+#topNavbar, #topNavbar .brand {
+  font-weight: bold;
+}
+
+#contentWrapper.loggedIn {
+  margin-top: 4.5em;
+}
+
+#topNavbar .navbar-inner p{
+  padding-left: 3em;  
+}
+
+#topNavbar .navbar-inner [class*=" icon-"] {
+  margin-top: 0.2em;
+}
+
+.navbar-inverse  .brand {
+  color: white;
+  text-shadow: 2px 2px 2px #4e16b3;
+        filter: dropshadow(color= #2137b3, offx=2, offy=2);
+ /*text-shadow: 2px 1px #2DB300 rgba(45,179, 0, 0.5);*/
+  
+  
+}
+
+
+.navbar .nav > li > .dropdown-menu:after {
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;    
+}
+
+.dropdown-menu {
+  background-color: #454545;
+}
+
+.dropdown-menu a {
+  color: white;
+  font-weight: bold;
+}
+
+
+
+#logoutLink {
+  float: right;
+}
+
+.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a {
+    background-color: #0081C2;
+    background-image: -moz-linear-gradient(center top , #281c91, #2137b3);
+    background-repeat: repeat-x;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+  
+.dropdown-toggle:hover i, .dropdown-toggle:focus i {
+  background-image: url("../bootstrap/img/glyphicons-halflings-white.png");
+
+}

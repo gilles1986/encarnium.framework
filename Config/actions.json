@@ -1,0 +1,8 @@
+{
+	"main"	: "main",
+	"loggedIn" : "loggedIn",
+	"login" : "login",
+	"logout" : "logout"
+	
+}
+
