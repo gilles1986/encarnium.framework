@@ -1,0 +1,8 @@
+{
+  "debugging": "true",
+  "loglevel": "debug",
+  "logpath": "Data/Log",
+  "stlogname": "temp",
+  "maxlogsize": 15000,
+  "mail": ""
+}

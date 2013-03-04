@@ -78,7 +78,7 @@ class ValidatorMessages {
 	 * @return	void
 	 */
 	public function __construct() {
-	 $this->configMessages = parse_ini_file(ROOT."Config/validator_errorMessages.ini");
+	 $this->configMessages = \Framework\Logic\Utils\jsonHandler::parseJson(ROOT."Config/validator_errorMessages.json");
 	}
 	
 	private function getValidatorName($validator) {
