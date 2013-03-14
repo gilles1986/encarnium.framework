@@ -13,8 +13,8 @@
     "reservedActions" => array(
       "404"
     ),
-    "defaultAction" => "main"
-
+    "defaultAction" => "main",
+    "actionName" => "action"
   );
 
 

@@ -61,7 +61,8 @@ class Core {
    * @var Application Options
    */
   private $options;
-	
+
+  private $app_config;
   
 	/**
 	 * Constructor
@@ -71,6 +72,7 @@ class Core {
 
 		//ClassLoader initializieren
 		$this->initializeClassLoader();
+    $this->app_config = $app_config;
     $this->options = \Framework\Logic\Utils\Utility::array_merge_recursive_unique($app_config, $options);;
 		//DebugExceptionHandler initializieren
 		$this->initializeDebugExceptionHandler();			
@@ -163,13 +165,18 @@ class Core {
 	 * @return void
 	 */
 	public function run($action=false, $validator=false) {
-		if(!$action ) {
-      $action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : ((isset($this->options['defaultAction'])) ? $this->options['defaultAction'] : 'main') ;
+		$actionName = isset($this->options['actionName']) ? $this->options['actionName'] : "action" ;
+    if(!$action ) {
+      $action = (isset($_REQUEST[$actionName])) ? $_REQUEST[$actionName] : ((isset($this->options['defaultAction'])) ? $this->options['defaultAction'] : 'main') ;
     }
 
 \Framework\Logger::debug("run:: Action ist ".$action, "Core");
-		
-		$this->actionController = new \Framework\EF\ActionController($action, $this->options);
+		if(class_exists("\\Plugins\\ActionController")) {
+      $this->actionController = new \Plugins\ActionController($action, $this->options);
+    } else {
+      $this->actionController = new \Framework\EF\ActionController($action, $this->options);
+    }
+
 
     $error = false;
 		 $realAction = '';
@@ -187,29 +194,47 @@ class Core {
        $error = true;
 
 		 }
-		 
+
 \Framework\Logger::debug("run:: ActionClassName ist ".$actionClassName, "Core");
     // Wenn eine Action weitergelietet wurde (z.B. 404)
     if($validator != false) {
-       $actionClass = new $actionClassName($this->validator, $this->options, $actionConfig['method'], $realAction);
+       $actionClass = new $actionClassName($this->validator, $this->options, $actionConfig['method'], $realAction, $this->app_config);
        return false;
      }
 
 		 if( $actionClassName && !$error ) {
-		 	$this->validator = new ValidatorManager($this->actionController->getActionConfig());
+
+      if(class_exists("\\Plugins\\ValidatorManager")) {
+        $this->validator = new \Plugins\ValidatorManager($this->actionController->getActionConfig());
+      } else {
+        $this->validator = new \Framework\EF\ValidatorManager($this->actionController->getActionConfig());
+      }
+
 			$this->validator->validate($action, $_REQUEST);
 			
-			$actionClass = new $actionClassName($this->validator, $this->options, $actionConfig['method'], $realAction);
+			$actionClass = new $actionClassName($this->validator, $this->options, $actionConfig['method'], $realAction, $this->app_config);
 		 } 
 		 else {
-       $this->validator = new ValidatorManager(array(
-         "name" => "404",
-         "displayName" => "Action",
-         "args" => array($action)
-       ), true);
-		     try {
 
-           $actionController =  new \Framework\EF\ActionController("404", $this->options);
+       if(class_exists("\\Plugins\\ValidatorManager")) {
+         $this->validator = new \Plugins\ValidatorManager(array(
+           "name" => "404",
+           "displayName" => "Action",
+           "args" => array($action)
+         ), true);
+       } else {
+         $this->validator = new \Framework\EF\ValidatorManager(array(
+           "name" => "404",
+           "displayName" => "Action",
+           "args" => array($action)
+         ), true);
+       }
+		     try {
+           if(class_exists("\\Plugins\\ActionController")) {
+             $actionController =  new \Plugins\ActionController("404", $this->options);
+           } else {
+             $actionController =  new \Framework\EF\ActionController("404", $this->options);
+           }
            $actionController->getActionConfig();
            $this->run("404", true);
 
