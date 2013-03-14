@@ -82,7 +82,7 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
     $this->setErrorMessages(new \Framework\EF\ValidatorMessages());
     if($preDefinedError != false) {
       Logger::debug("predefinedError: ".print_r($actionConfig, true), "ValidatorManager");
-      $this->getErrorMessages()->addError($actionConfig['name'], $actionConfig['displayName'], $actionConfig['args'], true);
+      $this->getErrorMessagesVar()->addError($actionConfig['name'], $actionConfig['displayName'], $actionConfig['args'], true);
     }
   }
 
@@ -92,7 +92,7 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    * @param Array	$request
    */
   public function validate($action, $request) {
-    if(count($this->getErrorMessages()->getErrorMessages()) > 0) return false;
+    if(count($this->getErrorMessagesVar()->getErrorMessages()) > 0) return false;
     $this->setAction($action);
 
     \Framework\Logger::debug("Action \"".$action."\" wird vom Validator-Manager validiert", "ValidatorManager");
@@ -122,9 +122,10 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    * @return	void
    */
   private function validateForm($request) {
-    $count = isset($this->getJsonContent()['validation']) ? count($this->getJsonContent()['validation']) : 0;
+    $jsonContent = $this->getJsonContentVar();
+    $count = isset($jsonContent['validation']) ? count($jsonContent['validation']) : 0;
     for($i=0; $i < $count; $i++) {
-      $this->validateField($this->getJsonContent()['validation'][$i], $request);
+      $this->validateField($jsonContent['validation'][$i], $request);
     }
   }
 
@@ -133,8 +134,9 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    * @return Array
    */
   private function getJsonContent(){
-    return isset($this->getJsonContent()[$this->getAction()])
-      ? $this->getJsonContent()[$this->getAction()]
+    $jsonContent = $this->getJsonContentVar();
+    return isset($jsonContent[$this->getAction()])
+      ? $jsonContent[$this->getAction()]
       : array();
   }
 
@@ -164,7 +166,8 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
     }
     // Wenn alle Validationen ok waren, dieses Feld freigeben
     if($valid === true) {
-      $this->getRequest()[$field['name']] = $value;
+      $req = $this->getRequest();
+      $req[$field['name']] = $value;
     }
   }
 
@@ -192,7 +195,7 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
         $argsAsString = "";
         $count = count($args);
         for($i=0; $i < $count; $i++) { $argsAsString .= "<br/> Argument $i: ".$args[$i]."<br/>";}
-        $this->getErrorMessages()->addError($name, $displayName, $args);
+        $this->getErrorMessagesVar()->addError($name, $displayName, $args);
         $this->setValid(false);
         return false;
       }
@@ -212,8 +215,8 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    * @param String $action Name der Aktion
    */
   private function hasAction() {
-
-    if(empty($this->getJsonContent()[$this->getAction()])) {
+    $jsonContent = $this->getJsonContentVar();
+    if(empty($jsonContent[$this->getAction()])) {
       new \Framework\Errors\ActionNotFoundException();
     }
     else {
@@ -233,7 +236,15 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    * @return	String
    */
   public function getErrorMessages() {
-    return $this->getErrorMessages()->getErrorMessages();
+    return $this->getErrorMessagesVar()->getErrorMessages();
+  }
+
+  public function getErrorMessagesVar() {
+    return $this->errorMessages;
+  }
+
+  public function setErrorMessages($errors) {
+    return $this->errorMessages = $errors;
   }
 
   /**
@@ -287,7 +298,7 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
   /**
    * @return String
    */
-  public function getJsonContent()
+  public function getJsonContentVar()
   {
     return $this->jsonContent;
   }
@@ -307,6 +318,8 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
   {
     return $this->valid;
   }
+
+
 
 
 
