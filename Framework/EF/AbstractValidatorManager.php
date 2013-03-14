@@ -78,11 +78,11 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    */
   public function __construct($actionConfig, $preDefinedError=false) {
 
-    $this->jsonContent = $actionConfig;
-    $this->errorMessages = new \Framework\EF\ValidatorMessages();
+    $this->setJsonContent($actionConfig);
+    $this->setErrorMessages(new \Framework\EF\ValidatorMessages());
     if($preDefinedError != false) {
       Logger::debug("predefinedError: ".print_r($actionConfig, true), "ValidatorManager");
-      $this->errorMessages->addError($actionConfig['name'], $actionConfig['displayName'], $actionConfig['args'], true);
+      $this->getErrorMessages()->addError($actionConfig['name'], $actionConfig['displayName'], $actionConfig['args'], true);
     }
   }
 
@@ -92,8 +92,8 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    * @param Array	$request
    */
   public function validate($action, $request) {
-    if(count($this->errorMessages->getErrorMessages()) > 0) return false;
-    $this->action = $action;
+    if(count($this->getErrorMessages()->getErrorMessages()) > 0) return false;
+    $this->setAction($action);
 
     \Framework\Logger::debug("Action \"".$action."\" wird vom Validator-Manager validiert", "ValidatorManager");
     $request2 = $request;
@@ -112,7 +112,7 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    * @return	void
    */
   private function readFormAction() {
-    $this->formFields = $this->getJsonContent();
+    $this->setFormFields($this->getJsonContent());
   }
 
   /**
@@ -122,9 +122,9 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    * @return	void
    */
   private function validateForm($request) {
-    $count = isset($this->jsonContent['validation']) ? count($this->jsonContent['validation']) : 0;
+    $count = isset($this->getJsonContent()['validation']) ? count($this->getJsonContent()['validation']) : 0;
     for($i=0; $i < $count; $i++) {
-      $this->validateField($this->jsonContent['validation'][$i], $request);
+      $this->validateField($this->getJsonContent()['validation'][$i], $request);
     }
   }
 
@@ -133,8 +133,8 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    * @return Array
    */
   private function getJsonContent(){
-    return isset($this->jsonContent[$this->action])
-      ? $this->jsonContent[$this->action]
+    return isset($this->getJsonContent()[$this->getAction()])
+      ? $this->getJsonContent()[$this->getAction()]
       : array();
   }
 
@@ -164,7 +164,7 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
     }
     // Wenn alle Validationen ok waren, dieses Feld freigeben
     if($valid === true) {
-      $this->request[$field['name']] = $value;
+      $this->getRequest()[$field['name']] = $value;
     }
   }
 
@@ -192,8 +192,8 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
         $argsAsString = "";
         $count = count($args);
         for($i=0; $i < $count; $i++) { $argsAsString .= "<br/> Argument $i: ".$args[$i]."<br/>";}
-        $this->errorMessages->addError($name, $displayName, $args);
-        $this->valid = false;
+        $this->getErrorMessages()->addError($name, $displayName, $args);
+        $this->setValid(false);
         return false;
       }
       else {
@@ -213,7 +213,7 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    */
   private function hasAction() {
 
-    if(empty($this->jsonContent[$this->action])) {
+    if(empty($this->getJsonContent()[$this->getAction()])) {
       new \Framework\Errors\ActionNotFoundException();
     }
     else {
@@ -233,7 +233,7 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
    * @return	String
    */
   public function getErrorMessages() {
-    return $this->errorMessages->getErrorMessages();
+    return $this->getErrorMessages()->getErrorMessages();
   }
 
   /**
@@ -243,6 +243,73 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
   public function getRequest() {
     return $this->request;
   }
+
+  /**
+   * @param string $action
+   */
+  public function setAction($action)
+  {
+    $this->action = $action;
+  }
+
+  /**
+   * @return string
+   */
+  public function getAction()
+  {
+    return $this->action;
+  }
+
+  /**
+   * @param \Framework\EF\unknown_type $formFields
+   */
+  public function setFormFields($formFields)
+  {
+    $this->formFields = $formFields;
+  }
+
+  /**
+   * @return \Framework\EF\unknown_type
+   */
+  public function getFormFields()
+  {
+    return $this->formFields;
+  }
+
+  /**
+   * @param String $jsonContent
+   */
+  public function setJsonContent($jsonContent)
+  {
+    $this->jsonContent = $jsonContent;
+  }
+
+  /**
+   * @return String
+   */
+  public function getJsonContent()
+  {
+    return $this->jsonContent;
+  }
+
+  /**
+   * @param boolean $valid
+   */
+  public function setValid($valid)
+  {
+    $this->valid = $valid;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function getValid()
+  {
+    return $this->valid;
+  }
+
+
+
 
 
 }

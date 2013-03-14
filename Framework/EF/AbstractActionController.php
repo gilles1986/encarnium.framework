@@ -88,9 +88,9 @@ abstract class AbstractActionController implements \Framework\EF\ActionControlle
     //Wenn kein Array vorhanden ist Fehler schmeißen
     if(!is_array($actions)) { throw new Exception("Error while loading actions.json: invalid json?"); }
 
-    if(isset($actions[$this->action]) && $actions[$this->action] != "") {
+    if(isset($actions[$this->getAction()]) && $actions[$this->getAction()] != "") {
       // Action reinladen
-      $actionConfigName = ($actions[$this->action] === "") ? $this->action : $actions[$this->action];
+      $actionConfigName = ($actions[$this->getAction()] === "") ? $this->getAction() : $actions[$this->getAction()];
       $fileName = str_replace('\\', '/', ACTION_CONFIGS . strtolower($actionConfigName) . ".json");
 
       if(!realpath($fileName)) {
@@ -137,6 +137,74 @@ abstract class AbstractActionController implements \Framework\EF\ActionControlle
 
     return $className;
   }
+
+  /**
+   * @param String $action
+   */
+  public function setAction($action)
+  {
+    $this->action = $action;
+  }
+
+  /**
+   * @return String
+   */
+  public function getAction()
+  {
+    return $this->action;
+  }
+
+  /**
+   * @param String $controller
+   */
+  public function setController($controller)
+  {
+    $this->controller = $controller;
+  }
+
+  /**
+   * @return String
+   */
+  public function getController()
+  {
+    return $this->controller;
+  }
+
+  /**
+   * @param String $errorController
+   */
+  public function setErrorController($errorController)
+  {
+    $this->errorController = $errorController;
+  }
+
+  /**
+   * @return String
+   */
+  public function getErrorController()
+  {
+    return $this->errorController;
+  }
+
+  /**
+   * @param \Framework\EF\Application $options
+   */
+  public function setOptions($options)
+  {
+    $this->options = $options;
+  }
+
+  /**
+   * @return \Framework\EF\Application
+   */
+  public function getOptions()
+  {
+    return $this->options;
+  }
+
+
+
+
 
 }
 ?>
