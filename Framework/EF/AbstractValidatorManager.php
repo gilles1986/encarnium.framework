@@ -184,8 +184,12 @@ abstract class AbstractValidatorManager implements \Framework\EF\ValidatorManage
       // Es ist möglich über die Reflection Class eine andere Klasse per String zu instanziieren
       $name = ucfirst($name);
 
-      $name = '\\Framework\\Validators\\'.$name;
 
+      if(class_exists('\\Plugins\\Validators\\'.$name)) {
+        $name = '\\Plugins\\Validators\\'.$name;
+      } else {
+        $name = '\\Framework\\Validators\\'.$name;
+      }
       $class = new \ReflectionClass($name);
       $args = (is_array($args)) ? $args : array($args);
       // Klasse instanziieren
