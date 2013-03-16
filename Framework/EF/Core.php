@@ -195,6 +195,12 @@ class Core {
 
 		 }
 
+     // check for action Class with right interface
+     if(!in_array("Framework\\EF\\AbstractControllerInterface",class_implements($actionClassName))) {
+        throw new Exception("Controller $actionClassName or parent class does not implement 'Framework\\EF\\AbstractControllerInterface'");
+     }
+
+
 \Framework\Logger::debug("run:: ActionClassName ist ".$actionClassName, "Core");
     // Wenn eine Action weitergelietet wurde (z.B. 404)
     if($validator != false) {

@@ -21,7 +21,7 @@
 *
 */
 
-declare(ENCODING = 'utf-8');
+
 namespace Framework\EF;
 
 /**
@@ -30,7 +30,7 @@ namespace Framework\EF;
  * @author Gilles, Nys Standop
  *
  */
-abstract class AbstractController {
+abstract class AbstractController implements \Framework\EF\AbstractControllerInterface {
   
 	/**
 	 * The Validator
@@ -278,7 +278,7 @@ abstract class AbstractController {
 		 } 
 		 else {
 
-		     if(class_exists("\Controller\FatalError")) {
+		     if(class_exists("\\Controller\\FatalError")) {
 		       new \Controller\FatalError("actionNotFound",htmlspecialchars($action));  
 		     } else {
 		       echo "<h2>This Action does not exists</h2><p>If you want a custom Error Site please create a FatalError Controller</p>";
