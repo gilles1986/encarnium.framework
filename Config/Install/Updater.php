@@ -8,6 +8,9 @@ namespace Config\Install;
  * Time: 15:19
  */ 
 class Updater implements \Framework\EF\InstallerInterface {
+
+  private $options;
+
   public function install() {
 
     if(file_exists(UPDATE_FILE) && file_exists(INSTALLED_FILE)) {
@@ -71,7 +74,8 @@ class Updater implements \Framework\EF\InstallerInterface {
 
       if($updateVersion >= $version) {
         $updateString = str_replace($filePostfix, "", $update);
-        $updateString = "\\Config\\Install\\Update\\".$updateString;
+        $options = $this->getOptions();
+        $updateString = ($options['updateClassPrefix']).$updateString;
         if(class_exists($updateString)) {
           $updater = new $updateString();
           $updater->install();
@@ -95,6 +99,12 @@ class Updater implements \Framework\EF\InstallerInterface {
     return array();
   }
 
+  public function setOptions($options) {
+    $this->options = $options;
+  }
 
+  public function getOptions() {
+    return $this->options;
+  }
 
 }

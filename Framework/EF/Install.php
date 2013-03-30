@@ -60,6 +60,7 @@ class Install implements \Framework\EF\InstallInterface {
     $installFile = $this->getOptions();
     if(in_array("Framework\\EF\\InstallerInterface", class_implements($installFile['installerClass']))) {
       $installer = new $installFile['installerClass']();
+      $installer->setOptions($this->getOptions());
       $installer->install();
     } else {
       throw new Exception("Installer Class ".$installFile['installerClass']." must implement Framework\\EF\\InstallerInterface");
@@ -71,6 +72,7 @@ class Install implements \Framework\EF\InstallInterface {
     $installFile = $this->getOptions();
     if(in_array("Framework\\EF\\InstallerInterface", class_implements($installFile['updaterClass']))) {
       $installer = new $installFile['updaterClass']();
+      $installer->setOptions($this->getOptions());
       $installer->install();
     } else {
       throw new Exception("Updater Class ".$installFile['updaterClass']." must implement Framework\\EF\\InstallerInterface");

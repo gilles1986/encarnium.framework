@@ -18,7 +18,8 @@
     "installClass" => "\\Framework\\EF\\Install",
     "costumInstall" => array(),
     "installerClass" => "\\Config\\Install\\Installer",
-    "updaterClass" => "\\Config\\Install\\Updater"
+    "updaterClass" => "\\Config\\Install\\Updater",
+    "updateClassPrefix" => "\\Config\\Install\\Update\\"
   );
 
 

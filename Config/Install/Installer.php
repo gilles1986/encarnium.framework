@@ -10,6 +10,8 @@ namespace Config\Install;
  */ 
 class Installer implements \Framework\EF\InstallerInterface {
 
+  private $options;
+
   public function install() {
     $this->createDirs();
     $version = "1.0";
@@ -34,5 +36,15 @@ class Installer implements \Framework\EF\InstallerInterface {
       mkdir(UPDATE);
     }
   }
+
+  public function setOptions($options) {
+    $this->options = $options;
+  }
+
+  public function getOptions() {
+    return $this->options;
+  }
+
+
 
 }

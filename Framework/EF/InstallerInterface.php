@@ -10,4 +10,7 @@ namespace Framework\EF;
  */
 interface InstallerInterface {
    public function install();
+   public function setOptions($options);
+  public function getOptions();
+
 }
