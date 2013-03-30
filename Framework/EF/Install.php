@@ -7,7 +7,6 @@ namespace Framework\EF;
  * User: Gilles
  * Date: 30.03.13
  * Time: 12:58
- *
  */ 
 class Install implements \Framework\EF\InstallInterface {
 
@@ -69,7 +68,13 @@ class Install implements \Framework\EF\InstallInterface {
 
   public function update()
   {
-    // TODO: Implement update() method.
+    $installFile = $this->getOptions();
+    if(in_array("Framework\\EF\\InstallerInterface", class_implements($installFile['updaterClass']))) {
+      $installer = new $installFile['updaterClass']();
+      $installer->install();
+    } else {
+      throw new Exception("Updater Class ".$installFile['updaterClass']." must implement Framework\\EF\\InstallerInterface");
+    }
   }
 
 

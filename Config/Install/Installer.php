@@ -19,7 +19,7 @@ class Installer implements \Framework\EF\InstallerInterface {
       unlink(INSTALL_FILE);
     }
 
-    file_put_contents(DATA."/.install", $version);
+    file_put_contents(INSTALLED_FILE, $version);
 
   }
 
@@ -30,7 +30,9 @@ class Installer implements \Framework\EF\InstallerInterface {
     mkdir(DATA."/Smarty/cached");
     mkdir(DATA."/Log");
     mkdir(DATA."/Log/archive");
-    echo "Done with createDirs";
+    if(!is_dir(UPDATE)) {
+      mkdir(UPDATE);
+    }
   }
 
 }

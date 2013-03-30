@@ -99,6 +99,14 @@ class Core {
             define('DATA', ROOT.'Data/');
         }
 
+        if(!defined('INSTALL')) {
+          define('INSTALL', CONFIG.'Install/');
+        }
+
+        if(!defined('UPDATE')) {
+          define('UPDATE', INSTALL.'Update/');
+        }
+
         if(!defined('INSTALLED_FILE')) {
           define('INSTALLED_FILE', DATA.'.install');
         }
