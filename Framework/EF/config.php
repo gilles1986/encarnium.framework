@@ -14,7 +14,11 @@
       "404"
     ),
     "defaultAction" => "main",
-    "actionName" => "action"
+    "actionName" => "action",
+    "installClass" => "\\Framework\\EF\\Install",
+    "costumInstall" => array(),
+    "installerClass" => "\\Config\\Install\\Installer",
+    "updaterClass" => "\\Config\\Install\\Updater"
   );
 
 

@@ -94,6 +94,26 @@ class Core {
 		if(!defined('CONFIG')) {
 			define('CONFIG', ROOT.'Config/');
 		}
+
+        if(!defined('DATA')) {
+            define('DATA', ROOT.'Data/');
+        }
+
+        if(!defined('INSTALLED_FILE')) {
+          define('INSTALLED_FILE', DATA.'.install');
+        }
+
+        if(!defined('INSTALL_FILE')) {
+            define('INSTALL_FILE', CONFIG.'.install');
+        }
+
+        if(!defined('UPDATE_FILE')) {
+            define('UPDATE_FILE', CONFIG.'.update');
+        }
+    if(!defined('ADDITIONAL_INSTALL')) {
+      define('ADDITIONAL_INSTALL', CONFIG.'install.php');
+    }
+
 		if(!defined('CLASSES')) {
 			define('CLASSES', ROOT.'Framework/');
 		}
@@ -253,6 +273,24 @@ class Core {
 		 
 		 
 	}
+
+  /**
+   * @param \Framework\EF\Application $options
+   */
+  public function setOptions($options)
+  {
+    $this->options = $options;
+  }
+
+  /**
+   * @return \Framework\EF\Application
+   */
+  public function getOptions()
+  {
+    return $this->options;
+  }
+
+
 }
 
 ?>
