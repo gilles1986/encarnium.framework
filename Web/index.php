@@ -58,7 +58,7 @@ if($userinstall->needsInstall()) {
 
 
 
-//$application->run();
+$application->run();
 
 
 ?>

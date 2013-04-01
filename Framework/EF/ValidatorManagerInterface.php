@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-declare(ENCODING = 'utf-8');
+
 namespace Framework\EF;
 
 interface ValidatorManagerInterface {

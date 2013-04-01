@@ -22,7 +22,7 @@
  * @modifiedby   $Author: g.meyer $
  *
  */
-declare(ENCODING = 'utf-8');
+
 namespace Framework\Logic\Utils;
 
 /**

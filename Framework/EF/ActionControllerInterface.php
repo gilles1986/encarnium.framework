@@ -1,6 +1,6 @@
 <?php
 
-declare(ENCODING = 'utf-8');
+
 namespace Framework\EF;
 /**
  * Created by IntelliJ IDEA.
