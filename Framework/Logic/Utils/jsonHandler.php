@@ -1,6 +1,5 @@
 <?php
 
-declare(ENCODING = 'utf-8');
 namespace Framework\Logic\Utils;
 
 abstract class jsonHandler {
