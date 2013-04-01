@@ -30,7 +30,7 @@ class Logger {
    * @param Boolean $sendMail [optional]
    */
   public static function init($configFile = null, $sendMail = false) {
-    self::$config = parse_ini_file(is_readable($configFile) ? $configFile : CONFIG.'/configlogger.ini');
+    self::$config = \Framework\Logic\Utils\jsonHandler::parseJson(is_readable($configFile) ? $configFile : CONFIG.'/configlogger.json');
     self::$mail = false;
     
     if($sendMail===true) {
@@ -100,14 +100,14 @@ class Logger {
    */
   protected static function writeLog($message, $logname = null, $logLevel) {
     // überprüfe, ob der Logger ausgeschaltet ist
-    if(strtolower(self::$config['debugging']) !== 'true') {
+    if(strtolower(self::$config->debugging) !== 'true') {
       return false;
     }
     
     // LOG STRING MESSAGES
     if(is_string($message)) {
       // überprüfe, ob das log level zulässig ist und geloggt werden kann
-      if(self::isValid(strtoupper(self::$config['loglevel']), strtoupper($logLevel)) === false) {
+      if(self::isValid(strtoupper(self::$config->loglevel), strtoupper($logLevel)) === false) {
         return false;
       }
       
@@ -119,7 +119,7 @@ class Logger {
       $msg = date('(d/m/Y)(H:i:s) ').basename($_SERVER['PHP_SELF'])." [{$logLevel}]: {$message}\r\n";
       
       $logname = str_replace('\\', '_', $logname);
-      $res = file_put_contents(ROOT.self::$config['logpath']."/".$logname.'_'.$date.'.log', $msg, FILE_APPEND);
+      $res = file_put_contents(ROOT.self::$config->logpath."/".$logname.'_'.$date.'.log', $msg, FILE_APPEND);
       
       // überprüfe, ob ein log file archiviert werden muss
       self::checkRotating();
@@ -129,18 +129,18 @@ class Logger {
     // LOG EXCEPTION MESSAGES
     elseif($message instanceof Exception) {
       // überprüfe, ob das log level zulässig ist und geloggt werden kann
-      if(self::isValid(strtoupper(self::$config['loglevel']), strtoupper($logLevel)) === false) {
+      if(self::isValid(strtoupper(self::$config->loglevel), strtoupper($logLevel)) === false) {
         return false;
       }
       
       // lognamen ermitteln
-      $logname = is_null($logname)||empty($logname) ? self::$config['stlogname'] : $logname;
+      $logname = is_null($logname)||empty($logname) ? self::$config->stlogname : $logname;
       
       // schreibe die log nachricht in die log datei
       $date = date("dmY");
       $msg  = date('(d/m/Y)(H:i:s) ').basename($_SERVER['PHP_SELF'])." [{$logLevel}]: ".$message->getMessage().
         " (Fehlercode: ".$message->getCode().") \r\n Stacktrace: \r\n ".$message->getTraceAsString()." \r\n";
-      $res = file_put_contents(ROOT.self::$config['logpath']."/".$logname.'_'.$date.'.log', $msg, FILE_APPEND);
+      $res = file_put_contents(ROOT.self::$config->logpath."/".$logname.'_'.$date.'.log', $msg, FILE_APPEND);
       
       // überprüfe, ob ein log file archiviert werden muss
       self::checkRotating();
@@ -197,27 +197,27 @@ class Logger {
    */
   protected static function checkRotating() {
     // erstelle log ordner wenn nicht vorhanden
-    if(is_dir(ROOT.self::$config['logpath']) === false) {
+    if(is_dir(ROOT.self::$config->logpath) === false) {
       // volle Rechte auf den _log_ ordner; bei windows der oktalwert: 0777
-      mkdir(ROOT.self::$config['logpath'], 0777);
+      mkdir(ROOT.self::$config->logpath, 0777);
     }
 
     // erstelle archiv ordner wenn nicht vorhanden
-    if(!is_dir(ROOT.self::$config['logpath']."/archive/")) {
+    if(!is_dir(ROOT.self::$config->logpath."/archive/")) {
       // volle Rechte auf den _archive_ ordner; bei windows der oktalwert: 0777
-      echo ROOT.self::$config['logpath']."/"."archive";
-      mkdir(ROOT.self::$config['logpath']."/"."archive", 0777);
+      echo ROOT.self::$config->logpath."/"."archive";
+      mkdir(ROOT.self::$config->logpath."/"."archive", 0777);
     }
     
     // bereite überprüfung für archivierung vor:
-    $logFiles = glob(ROOT.self::$config['logpath']."/".'*.log');
+    $logFiles = glob(ROOT.self::$config->logpath."/".'*.log');
 
     foreach($logFiles as $file) {
       // holt sich die einzelnen Teile des Dateinamens
       $split = explode("_", basename($file));
 			$split = array_reverse($split);
       // $split[1] enthält das eindeutige und zuverlässig Erstelldatum der Datei (falls Datei geändert wurde, etc.)
-      if($split[0] !== date('dmY').'.log'||(filesize($file)/1024)>=self::$config['maxlogsize']) {
+      if($split[0] !== date('dmY').'.log'||(filesize($file)/1024)>=self::$config->maxlogsize) {
         return self::logRotate($file);
       }
     }
@@ -233,7 +233,7 @@ class Logger {
    * @return true on success|false on failure
    */
   protected static function logRotate($file) {     
-    $sameNamedFiles = glob(ROOT.self::$config['logpath'].'/archive/'.'*'.basename($file));
+    $sameNamedFiles = glob(ROOT.self::$config->logpath.'/archive/'.'*'.basename($file));
     
     // Anzahl der Dateien mit dem gleichem Namen (im archive ordner)
     $counter = ((count($sameNamedFiles)) + 1);
@@ -249,7 +249,7 @@ class Logger {
     }
     
     // Log ins Archiv schieben
-    return rename(ROOT.self::$config['logpath']."/".basename($file), ROOT.self::$config['logpath'].'/archive/'.$counter.'_'.basename($file));
+    return rename(ROOT.self::$config->logpath."/".basename($file), ROOT.self::$config->logpath.'/archive/'.$counter.'_'.basename($file));
   }
 
 }
