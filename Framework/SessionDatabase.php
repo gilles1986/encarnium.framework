@@ -1,4 +1,4 @@
-<?php
+<?php 
 /*
  DB TABLE STRUCTURE
 
@@ -11,7 +11,7 @@
 
  */
 
-declare(ENCODING = 'utf-8');
+
 namespace Framework;
 
 /**

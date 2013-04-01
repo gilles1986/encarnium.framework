@@ -21,7 +21,7 @@
 *
 */
 
-declare(ENCODING = 'utf-8');
+
 namespace Framework\EF;
 
 /**
@@ -30,7 +30,7 @@ namespace Framework\EF;
  * @author Gilles, Nys Standop
  *
  */
-abstract class AbstractController {
+abstract class AbstractController implements \Framework\EF\AbstractControllerInterface {
   
 	/**
 	 * The Validator
@@ -109,15 +109,18 @@ abstract class AbstractController {
    * @var Additional Params
    */
   private $params;
+
+  private $app_config;
   
   /**
    * Constructor
    * @param \Framework\EF\ValidatorManager $validator
    */
-  public function __construct(\Framework\EF\ValidatorManager $validator,$options, $action='', $realAction='', $params=false) {
+  public function __construct(\Framework\EF\ValidatorManagerInterface $validator,$options, $action='', $realAction='', $params=false, $app_config=array()) {
   	//Bindet ExtClasses ein wenn diese vorhanden sind
     $this->__tryLoadExtClasses();
 
+    $this->app_config = $app_config;
     $this->params = $params;
     $this->options = $options;
     $this->validator = $validator;
@@ -182,8 +185,7 @@ abstract class AbstractController {
                 $_REQUEST['extensionError']['extensionClassFailed'] = realpath(CLASSES . $className . '.php');
                 
                 $_REQUEST['action'] = "error404";
-
-                $newRequest = new \Framework\EF\Core($options);
+                $newRequest = new \Framework\EF\Core($this->options, $this->app_config);
                 $newRequest->run();
                 die();
             }
@@ -240,7 +242,14 @@ abstract class AbstractController {
   public function doAction($action) {
   	\Framework\Logger::debug("run:: Action ist ".$action, "Core");
 		
-		$this->actionController = new \Framework\EF\ActionController($action);
+
+    $this->actionController = new \Framework\EF\ActionController($action, array());
+
+    if(class_exists("\\Plugins\\ActionController")) {
+      $this->actionController = new \Plugins\ActionController($action, array());
+    } else {
+      $this->actionController = new \Framework\EF\ActionController($action, array());
+    }
 		
 		 $realAction = '';
 		 $actionClassName = null;
@@ -269,7 +278,7 @@ abstract class AbstractController {
 		 } 
 		 else {
 
-		     if(class_exists("\Controller\FatalError")) {
+		     if(class_exists("\\Controller\\FatalError")) {
 		       new \Controller\FatalError("actionNotFound",htmlspecialchars($action));  
 		     } else {
 		       echo "<h2>This Action does not exists</h2><p>If you want a custom Error Site please create a FatalError Controller</p>";
@@ -368,7 +377,7 @@ abstract class AbstractController {
     	$cachedir = str_replace('\\', '/', ROOT.'Data/Smarty/compiled/'.$controller.'/');
     	if(!is_dir($cachedir)) {
     		//@todo richtige Fehlerzahl reinschreiben
-    		if(!mkdir($cachedir)) { throw new Exception('Can not create Dir', 400005); }
+    		if(!mkdir($cachedir)) { throw new Exception('Can not create Dir: '.$cachedir, 400005); }
     	}
     	
     	

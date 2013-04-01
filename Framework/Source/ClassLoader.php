@@ -1,6 +1,6 @@
 <?php
 
-declare(ENCODING = 'utf-8');
+
 namespace Framework\Source;
 
 
@@ -71,18 +71,22 @@ class ClassLoader {
 
             $this->classes[$class] = array('file' => $file);
 	
-			
+
+
+
 			if(!file_exists($file1)) {
 			   if(!file_exists($file2)) {
-                   // throw new Exception('File '.$file.' not found');
+                   // throw new Exception('File '.$file.' or '.$file2.' not found');
                    return;
                } else {
                    $this->classes[$class] = array('file' => $file2);
+      //echo $file2."<br/>";
                    require_once $file2;
                }
 
 			} else {
              $this->classes[$class] = array('file' => $file1);
+        //echo $file1."<br/>";
               require_once $file1;
 			return;
 			}
