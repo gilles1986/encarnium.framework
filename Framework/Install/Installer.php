@@ -32,6 +32,8 @@ class Installer implements \Framework\EF\InstallerInterface {
     mkdir(DATA."/Smarty/cached");
     mkdir(DATA."/Log");
     mkdir(DATA."/Log/archive");
+    mkdir(EFINSTALL."Data");
+    mkdir(EFINSTALL."Update");
     if(!is_dir(EFUPDATE)) {
       mkdir(EFUPDATE);
     }
