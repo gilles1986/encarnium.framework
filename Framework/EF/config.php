@@ -16,7 +16,7 @@
     "defaultAction" => "main",
     "actionName" => "action",
     "installClass" => "\\Framework\\EF\\UserInstall",
-    "costumInstall" => array(),
+    "costumInstall" => "",
     "installerClass" => "\\Config\\Install\\Installer",
     "updaterClass" => "\\Config\\Install\\Updater",
     "updateClassPrefix" => "\\Config\\Install\\Update\\",
