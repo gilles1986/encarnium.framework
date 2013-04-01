@@ -8,7 +8,7 @@ namespace Framework\EF;
  * Date: 30.03.13
  * Time: 12:58
  */ 
-class Install implements \Framework\EF\InstallInterface {
+class UserInstall implements \Framework\EF\InstallInterface {
 
     private $installedVersion;
     private $updateVersion;
@@ -19,11 +19,12 @@ class Install implements \Framework\EF\InstallInterface {
    }
 
     public function needsInstall() {
-      if(is_dir(DATA)) {
-        if(file_exists(EFINSTALLED_FILE)) {
-          $this->setInstalledVersion(floatval(file_get_contents(EFINSTALLED_FILE)));
-          if(file_exists(UPDATE_FILE)) {
-            $this->setUpdateVersion(floatval(file_get_contents(EFUPDATE_FILE)));
+       $options = $this->getOptions();
+
+        if(file_exists($options['installedFile'])) {
+          $this->setInstalledVersion(floatval(file_get_contents($options['installedFile'])));
+          if(file_exists($options['updateFile'])) {
+            $this->setUpdateVersion(floatval(file_get_contents($options['updateFile'])));
           } else {
             return false;
           }
@@ -35,9 +36,7 @@ class Install implements \Framework\EF\InstallInterface {
         } else {
            return true;
         }
-      } else {
-          return true;
-      }
+
     }
 
     public function needsUpdate() {
@@ -57,14 +56,16 @@ class Install implements \Framework\EF\InstallInterface {
 
   public function install()
   {
-      $installer = new \Framework\Install\Installer();
+    $options = $this->getOptions();
+      $installer = new $options['installerClass'];
       $installer->setOptions($this->getOptions());
       $installer->install();
   }
 
   public function update()
   {
-      $installer = new \Framework\Install\Updater();
+    $options = $this->getOptions();
+    $installer = new $options['updaterClass'];
       $installer->setOptions($this->getOptions());
       $installer->install();
 

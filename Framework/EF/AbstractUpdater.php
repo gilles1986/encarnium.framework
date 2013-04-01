@@ -10,25 +10,30 @@ namespace Framework\EF;
  */ 
 abstract class AbstractUpdater {
   private $options;
+  private $updateDir;
+  private $installedFile;
 
   public function install() {
 
-    if(file_exists(UPDATE_FILE) && file_exists(INSTALLED_FILE)) {
+    $this->setUpdateDir(UPDATE);
+    $this->setInstalledFile(INSTALLED);
+
+    if(file_exists(EFUPDATE_FILE) && file_exists(EFINSTALLED_FILE)) {
 
       $this->update();
 
       $version = file_get_contents(UPDATE_FILE);
-      file_put_contents(INSTALLED_FILE, $version);
+      file_put_contents(EFINSTALLED_FILE, $version);
 
-      unlink(UPDATE_FILE);
+      unlink(EFUPDATE_FILE);
     }
 
 
   }
 
   public function update() {
-    $updateVersion = floatval(file_get_contents(INSTALLED_FILE));
-    if(is_dir(UPDATE)) {
+    $updateVersion = floatval(file_get_contents($this->getInstalledFile()));
+    if(is_dir($this->getUpdateDir())) {
       $updates = $this->readUpdateFiles();
       $updates = $this->sortArray($updates);
       $this->updateLoop($updateVersion, $updates);
@@ -85,7 +90,7 @@ abstract class AbstractUpdater {
   }
 
   private function readUpdateFiles() {
-    if ($dir = opendir(UPDATE)) {
+    if ($dir = opendir($this->getUpdateDir())) {
       $updates = array();
       while (false !== ($file = readdir($dir))) {
         if ($file != "." && $file != "..") {
@@ -106,4 +111,23 @@ abstract class AbstractUpdater {
   public function getOptions() {
     return $this->options;
   }
+
+  public function setInstalledFile($installedFile) {
+    $this->installedFile = $installedFile;
+  }
+
+  public function getInstalledFile() {
+    return $this->installedFile;
+  }
+
+  public function setUpdateDir($updateDir) {
+    $this->updateDir = $updateDir;
+  }
+
+  public function getUpdateDir() {
+    return $this->updateDir;
+  }
+
+
+
 }

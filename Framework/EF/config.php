@@ -15,11 +15,15 @@
     ),
     "defaultAction" => "main",
     "actionName" => "action",
-    "installClass" => "\\Framework\\EF\\Install",
+    "installClass" => "\\Framework\\EF\\UserInstall",
     "costumInstall" => array(),
     "installerClass" => "\\Config\\Install\\Installer",
     "updaterClass" => "\\Config\\Install\\Updater",
-    "updateClassPrefix" => "\\Config\\Install\\Update\\"
+    "updateClassPrefix" => "\\Config\\Install\\Update\\",
+    "installedFile" => DATA.".installed",
+    "updateFile" => CONFIG.".update",
+    "installFile" => CONFIG.".install",
+    "installDir" => CONFIG."Install/",
   );
 
 

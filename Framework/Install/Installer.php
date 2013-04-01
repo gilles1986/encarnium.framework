@@ -1,13 +1,15 @@
 <?php
 
-namespace Framework\EF;
+namespace Framework\Install;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Gilles
  * Date: 30.03.13
- * Time: 16:51
+ * Time: 14:21
  */ 
-abstract class AbstractInstaller implements \Framework\EF\InstallerInterface{
+class Installer implements \Framework\EF\InstallerInterface {
+
   private $options;
 
   public function install() {
@@ -42,4 +44,8 @@ abstract class AbstractInstaller implements \Framework\EF\InstallerInterface{
   public function getOptions() {
     return $this->options;
   }
+
+
+
+
 }

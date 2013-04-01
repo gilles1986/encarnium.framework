@@ -107,6 +107,8 @@ class Core {
           define('UPDATE', INSTALL.'Update/');
         }
 
+
+
         if(!defined('INSTALLED_FILE')) {
           define('INSTALLED_FILE', DATA.'.install');
         }
@@ -118,6 +120,8 @@ class Core {
         if(!defined('UPDATE_FILE')) {
             define('UPDATE_FILE', CONFIG.'.update');
         }
+
+
     if(!defined('ADDITIONAL_INSTALL')) {
       define('ADDITIONAL_INSTALL', CONFIG.'install.php');
     }
@@ -125,6 +129,29 @@ class Core {
 		if(!defined('CLASSES')) {
 			define('CLASSES', ROOT.'Framework/');
 		}
+
+
+    if(!defined('EFINSTALL')) {
+      define('EFINSTALL', CLASSES.'/Install/');
+    }
+
+    if(!defined('EFUPDATE')) {
+      define('EFUPDATE', EFINSTALL.'Update/');
+    }
+
+    if(!defined('EFINSTALLED_FILE')) {
+      define('EFINSTALLED_FILE', EFINSTALL.'Data/.installed');
+    }
+
+    if(!defined('EFUPDATE_FILE')) {
+      define('EFUPDATE_FILE', EFINSTALL.'Config/.update');
+    }
+    if(!defined('EFINSTALL_FILE')) {
+      define('EFINSTALL_FILE', EFINSTALL.'Config/.install');
+    }
+
+
+
 	    if(!defined('CRUDS')) {
 			define('CRUDS', ROOT.'Packages/CRUD/');
 		}

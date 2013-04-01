@@ -36,21 +36,29 @@ if(is_string($options['costumInstall'])) {
   }
 }
 
+
+$install = new \Framework\EF\Install($options);
+if($install->needsInstall()) {
+   $install->installUpdate();
+}
+
+
 if(class_exists($options['installClass'])) {
   if(in_array("Framework\\EF\\InstallInterface", class_implements($options['installClass']))) {
-    $install = new $options['installClass']($options);
+    $userinstall = new $options['installClass']($options);
   } else {
     throw new Exception("InstallClass ".$options['installClass']." does not implement InstallInterface");
   }
 } else {
   throw new Exception("InstallClass ".$options['installClass']." does not exist. Check your config file");
 }
-
-if($install->needsInstall()) {
-  $install->installUpdate();
+if($userinstall->needsInstall()) {
+  $userinstall->installUpdate();
 }
 
-$application->run();
+
+
+//$application->run();
 
 
 ?>

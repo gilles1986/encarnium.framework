@@ -1,4 +1,4 @@
-<?php
+<?php 
 /*
  DB TABLE STRUCTURE
 
