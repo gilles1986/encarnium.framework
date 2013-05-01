@@ -2,8 +2,12 @@
 
 namespace Framework\Logic\Utils;
 
-abstract class jsonHandler {
-  
+class jsonHandler {
+
+  private function __construct() {
+
+  }
+
   
   /**
    * parseJson
@@ -13,7 +17,7 @@ abstract class jsonHandler {
    */
   public static function parseJson($filename){
     \Framework\Logger::debug('json file "'.$filename.'" was called', 'jsonHandler\parse');
-    $return = null;
+    $return = array();
     if(file_exists($filename)){
       \Framework\Logger::debug('File "'.$filename.'" exists.', 'jsonHandler\parse');
       
@@ -22,7 +26,7 @@ abstract class jsonHandler {
         \Framework\Logger::error('Error loading file "'.$filename.'": file not readable?', 'jsonHandler\parse');
         throw new \Exception('Error loading file "'.$filename.'": file not readable?');
       } else {
-        $return = json_decode($filecontent);
+        $return = json_decode($filecontent, true);
         if(!$return){
           \Framework\Logger::error('Error decoding json file "'.$filename.'": not a valid json file?', 'jsonHandler\parse');
           throw new \Exception('Error decoding json file "'.$filename.'": not a valid json file?');
